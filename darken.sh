@@ -1,0 +1,13 @@
+#!/bin/bash
+
+file=$1
+echo Darkening the PDF at a %75 threshold
+echo Converting PDF to JPGs...
+magick convert -density 300 $file darken_pdf_preprocess_%%02d.jpg
+echo Darkening JPGs...
+magick convert darken_pdf_preprocess*.jpg -blur x1 -threshold 75% +profile "*" darken_pdf_postprocess_%%02d.jpg
+echo Converting JPGs to PDF...
+magick convert darken_pdf_postprocess*.jpg $file.darkened.pdf
+echo Deleting JPGs...
+rm darken_pdf_*.jpg
+echo Done!
